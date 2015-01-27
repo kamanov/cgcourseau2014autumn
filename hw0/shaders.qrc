@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>vertex_chess1.glsl</file>
+        <file>fragment_chess.glsl</file>
+        <file>fragment.glsl</file>
+        <file>vertex_chess2.glsl</file>
+        <file>vertex.glsl</file>
+    </qresource>
+</RCC>
