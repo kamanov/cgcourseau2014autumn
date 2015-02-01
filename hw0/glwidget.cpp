@@ -6,6 +6,8 @@
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent)
+    , width(480)
+    , height(480)
 {
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(rotate()));
 }
@@ -16,7 +18,7 @@ return QSize(480, 480);
 }
 
 void GLWidget::setShaderProgramm(int i) {
-    if (i >= 0 && i < 3) {
+    if (i >= 0 && i < 4) {
         shaderProgram = programms + i;
         updateGL();
     }
@@ -56,6 +58,7 @@ void GLWidget::initializeGL()
     initShaderProgramm(programms[0], ":/vertex.glsl", ":/fragment.glsl");
     initShaderProgramm(programms[1], ":/vertex_chess1.glsl", ":/fragment_chess.glsl");
     initShaderProgramm(programms[2], ":/vertex_chess2.glsl", ":/fragment_chess.glsl");
+    initShaderProgramm(programms[3], ":/vertex.glsl", ":/fragment_chess1.glsl");
     initTextures();
     float h = 1/qSqrt(3);
     vertices << QVector3D(1.0f, -h, 0.0f) << QVector3D(-1.0f, -h, 0.0f) << QVector3D(0.0f, 2 * h, 0.0f);
@@ -68,6 +71,8 @@ void GLWidget::resizeGL(int width, int height)
     if (height == 0) {
         height = 1;
     }
+    this->width = width;
+    this->height = height;
     glViewport(0, 0, width, height);
 }
 
@@ -84,6 +89,10 @@ void GLWidget::paintGL()
     shaderProgram->setUniformValue("mvpMatrix", rotationMatrix * scaleMatrix);
     shaderProgram->setUniformValue("color", QColor(Qt::blue));
     shaderProgram->setUniformValue("texture", 0);
+    if (shaderProgram == &programms[3]) {
+        shaderProgram->setUniformValue("width", width);
+        shaderProgram->setUniformValue("height", height);
+    }
     shaderProgram->setAttributeArray("vert", vertices.constData());
     shaderProgram->enableAttributeArray("vert");
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());

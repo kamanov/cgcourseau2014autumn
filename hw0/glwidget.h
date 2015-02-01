@@ -25,12 +25,14 @@ private:
     QMatrix4x4 rotationMatrix;
     QVector<QVector3D> vertices;
 
-    QGLShaderProgram programms[3];
+    QGLShaderProgram programms[4];
     QGLShaderProgram *shaderProgram;
 
     QTimer timer;
     GLuint texture;
 
+    float width;
+    float height;
 public slots:
     void rotate();
     void setShaderProgramm(int i);
