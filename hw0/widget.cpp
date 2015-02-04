@@ -12,6 +12,7 @@ Widget::Widget(QWidget *parent) :
     comboBox->addItem("chess display shader");
     comboBox->addItem("chess non-display shader");
     comboBox->addItem("chess gl_FragCoord");
+    comboBox->addItem("fractal Julia");
     QObject::connect(comboBox, SIGNAL(activated(int)), glwidget, SLOT(setShaderProgramm(int)));
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(glwidget);

@@ -3,11 +3,15 @@
 #include <qmath.h>
 #include <QGLBuffer>
 #include <iostream>
+#include <QDebug>
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent)
-    , width(480)
-    , height(480)
+    , m_width(480)
+    , m_height(480)
+    , cx(-0.43)
+    , cy(-0.59)
+    , fractal_iter(103)
 {
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(rotate()));
 }
@@ -18,8 +22,12 @@ return QSize(480, 480);
 }
 
 void GLWidget::setShaderProgramm(int i) {
-    if (i >= 0 && i < 4) {
+    if (i >= 0 && i < 5) {
         shaderProgram = programms + i;
+        if (i == 4)
+            timer.stop();
+        else
+            timer.start(30);
         updateGL();
     }
 }
@@ -45,8 +53,10 @@ void GLWidget::initTextures()
 }
 
 void GLWidget::initShaderProgramm(QGLShaderProgram& programm, const QString& vertex, const QString& fragment) {
-    if (!programm.addShaderFromSourceFile(QGLShader::Vertex, vertex))
-        close();
+    if (vertex.size() > 0) {
+        if (!programm.addShaderFromSourceFile(QGLShader::Vertex, vertex))
+            close();
+    }
     if (!programm.addShaderFromSourceFile(QGLShader::Fragment, fragment))
         close();
     programm.link();
@@ -59,9 +69,11 @@ void GLWidget::initializeGL()
     initShaderProgramm(programms[1], ":/vertex_chess1.glsl", ":/fragment_chess.glsl");
     initShaderProgramm(programms[2], ":/vertex_chess2.glsl", ":/fragment_chess.glsl");
     initShaderProgramm(programms[3], ":/vertex.glsl", ":/fragment_chess1.glsl");
+    initShaderProgramm(programms[4], "", ":/fragment_fractal.glsl");
     initTextures();
     float h = 1/qSqrt(3);
     vertices << QVector3D(1.0f, -h, 0.0f) << QVector3D(-1.0f, -h, 0.0f) << QVector3D(0.0f, 2 * h, 0.0f);
+
     shaderProgram = &programms[0];
     timer.start(30);
 }
@@ -71,8 +83,8 @@ void GLWidget::resizeGL(int width, int height)
     if (height == 0) {
         height = 1;
     }
-    this->width = width;
-    this->height = height;
+    this->m_width = width;
+    this->m_height = height;
     glViewport(0, 0, width, height);
 }
 
@@ -90,8 +102,22 @@ void GLWidget::paintGL()
     shaderProgram->setUniformValue("color", QColor(Qt::blue));
     shaderProgram->setUniformValue("texture", 0);
     if (shaderProgram == &programms[3]) {
-        shaderProgram->setUniformValue("width", width);
-        shaderProgram->setUniformValue("height", height);
+        shaderProgram->setUniformValue("width", m_width);
+        shaderProgram->setUniformValue("height", m_height);
+    } else if (shaderProgram == &programms[4]) {
+        shaderProgram->setUniformValue("c", QVector2D(cx , cy));
+        shaderProgram->setUniformValue("iter", fractal_iter);
+        GLfloat vertices[] = {-1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f};
+        GLfloat texVertices[] = {0,0, 0,1, 1,1, 1, 0};
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+        glVertexPointer(3, GL_FLOAT, 0, vertices);
+        glTexCoordPointer(2, GL_FLOAT, 0, texVertices);
+        glDrawArrays(GL_QUADS, 0, 4);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        shaderProgram->release();
+        return;
     }
     shaderProgram->setAttributeArray("vert", vertices.constData());
     shaderProgram->enableAttributeArray("vert");
@@ -99,3 +125,18 @@ void GLWidget::paintGL()
     shaderProgram->disableAttributeArray("vert");
     shaderProgram->release();
 }
+
+void GLWidget::mouseMoveEvent(QMouseEvent* event) {
+    if(event->buttons() & Qt::LeftButton) {
+        cx = 2 * event->x()/ float(width()) - 1;
+        cy = 2 * event->y() / float(height()) - 1;
+        updateGL();
+    }
+}
+
+void GLWidget::wheelEvent(QWheelEvent* event) {
+    float d = event->delta() > 0 ? 1 : -1;
+    fractal_iter += d;
+    updateGL();
+}
+

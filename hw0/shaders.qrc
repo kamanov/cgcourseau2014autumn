@@ -6,5 +6,6 @@
         <file>vertex_chess2.glsl</file>
         <file>vertex.glsl</file>
         <file>fragment_chess1.glsl</file>
+        <file>fragment_fractal.glsl</file>
     </qresource>
 </RCC>

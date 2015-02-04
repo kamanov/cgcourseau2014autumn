@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QGLShaderProgram>
 #include <QTimer>
+#include <QMouseEvent>
 
 class GLWidget : public QGLWidget
 {
@@ -15,8 +16,12 @@ public:
 
 protected:
     void initializeGL();
-    void resizeGL(int width, int height);
+    void resizeGL(int m_width, int m_height);
     void paintGL();
+
+    void mouseMoveEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
+
 
 private:
     void initTextures();
@@ -24,15 +29,20 @@ private:
 
     QMatrix4x4 rotationMatrix;
     QVector<QVector3D> vertices;
+    QVector<QVector3D> fractal_vertices;
 
-    QGLShaderProgram programms[4];
+    QGLShaderProgram programms[5];
     QGLShaderProgram *shaderProgram;
 
     QTimer timer;
     GLuint texture;
 
-    float width;
-    float height;
+    float m_width;
+    float m_height;
+
+    float cx;
+    float cy;
+    int fractal_iter;
 public slots:
     void rotate();
     void setShaderProgramm(int i);
