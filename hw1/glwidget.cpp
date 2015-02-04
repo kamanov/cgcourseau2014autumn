@@ -167,6 +167,7 @@ void GLWidget::paintGL()
 
     shaderProgram.bind();
     shaderProgram.setUniformValue("mvpMatrix", pMatrix * vMatrix * mMatrix);
+    shaderProgram.setUniformValue("modelMatrix", mMatrix);
     shaderProgram.setUniformValue("rastr_mode", rastr_mode);
     shaderProgram.setUniformValue("vt", vt);
     shaderProgram.setUniformValue("c", model_center);

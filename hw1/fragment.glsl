@@ -10,8 +10,7 @@ varying vec4 pos;
 
 void main(void) {
     if (rastr_mode == 2) {
-        vec4 w_c = mvpMatrix * c;
-        float t = abs(sin(vt + k_per_max * length(pos - w_c)));
+        float t = abs(sin(vt + k_per_max * length(pos - c)));
         gl_FragColor = vec4(t, t, t, 1);
     } else {
         gl_FragColor = color;
