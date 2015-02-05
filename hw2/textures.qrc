@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>brickwork_normal-map.jpg</file>
+        <file>brickwork-texture.jpg</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cylinder.obj</file>
+        <file>sphere.obj</file>
+        <file>plane.obj</file>
+    </qresource>
+</RCC>
