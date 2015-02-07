@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>vertex_light.glsl</file>
+        <file>fragment_light.glsl</file>
+        <file>vertex_light_source.glsl</file>
+        <file>fragment_light_source.glsl</file>
+    </qresource>
+</RCC>
