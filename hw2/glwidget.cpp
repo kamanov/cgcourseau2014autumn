@@ -97,7 +97,7 @@ bool GLWidget::loadObjModel(QString filename, Object3D& outObject)
     }
 
     foreach (Face f, faces) {
-        for (int i = 0; i < 3; i++) {     
+        for (int i = 0; i < 3; i++) {
             outObject.vertices.push_back(verts[f.v[i] - 1]);
             outObject.texcoords.push_back(textures[f.t[i] - 1]);
             outObject.normals.push_back(normals[f.n[i] - 1]);
@@ -134,6 +134,7 @@ void GLWidget::initShaderProgramm(QGLShaderProgram& programm, const QString& ver
 
 void GLWidget::initializeGL()
 {
+    initializeGLFunctions();
     loadObjModel(":/plane.obj", objects[0]);
     loadObjModel(":/sphere.obj", objects[1]);
     loadObjModel(":/cylinder.obj", objects[2]);

@@ -65,6 +65,7 @@ void GLWidget::initShaderProgramm(QGLShaderProgram& programm, const QString& ver
 
 void GLWidget::initializeGL()
 {
+    initializeGLFunctions();
     glEnable(GL_DEPTH_TEST);
     qglClearColor(QColor(Qt::gray));
     initShaderProgramm(lightProgramm, ":/vertex_light.glsl", ":/fragment_light.glsl");

@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QGLShaderProgram>
 #include <QTimer>
+#include <QGLFunctions>
 #include <math.h>
 
 struct Object3D {
@@ -12,7 +13,7 @@ struct Object3D {
     QVector<QVector2D> texcoords;
 };
 
-class GLWidget : public QGLWidget
+class GLWidget : public QGLWidget, public QGLFunctions
 {
     Q_OBJECT
 public:
