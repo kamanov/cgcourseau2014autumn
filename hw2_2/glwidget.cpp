@@ -1,7 +1,6 @@
 #include "glwidget.h"
 #include <qmath.h>
 #include <QGLBuffer>
-#include <QFile>
 #include <QMouseEvent>
 
 struct Face {

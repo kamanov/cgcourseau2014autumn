@@ -3,7 +3,6 @@
 
 #include <QGLWidget>
 #include <QGLShaderProgram>
-#include <QTimer>
 #include <QGLFunctions>
 #include <math.h>
 

@@ -20,8 +20,6 @@ GLWidget::GLWidget(QWidget *parent)
     currentObject = &objects[0];
 }
 
-
-
 QSize GLWidget::sizeHint() const
 {
     return QSize(640, 480);
